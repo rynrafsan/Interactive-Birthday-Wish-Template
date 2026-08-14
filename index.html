@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+<title>A Birthday Surprise 💕</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&family=Quicksand:wght@400;500;600;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js" crossorigin></script>
+<style>
+  html, body { margin: 0; padding: 0; }
+  * { box-sizing: border-box; }
+  .font-display { font-family: 'Playfair Display', Georgia, serif; }
+  .font-body { font-family: 'Quicksand', system-ui, sans-serif; }
+  .font-script { font-family: 'Caveat', cursive; }
+
+  :root {
+    --bg-1: #FBEAE9; --bg-2: #FDF6F0; --bg-3: #F6E4D8;
+    --cream-1: #FDF6F0; --cream-2: #FBEDE3;
+    --story-1: #2C1B22; --story-2: #3B222B;
+    --grad-1: #E8B4B8; --grad-2: #C99383;
+    --glass-bg: rgba(255,255,255,0.72); --glass-border: rgba(255,255,255,0.85);
+    --letter-1: #FFFDF9; --letter-2: #FFF8F1;
+    --ink: #5C3A42; --muted: #B08876; --accent: #C99383;
+    --cream-text: #FDF1EA; --cream-text-muted: #E3C9C4;
+    --shadow: rgba(190,140,130,0.18); --shadow-lg: rgba(150,90,90,0.22);
+    --phone-bg: #FFFBF7; --phone-border: rgba(255,255,255,0.7); --phone-shadow: rgba(120,70,70,0.28);
+    --input-bg: #FFFFFF; --input-border: #EADFD6;
+    --blob-1: #F3D0CE; --blob-2: #EFD9B8;
+    --dot-active: #C99383; --dot-inactive: rgba(201,147,131,0.25);
+    --surface: #FFFFFF; --link-muted: #C9AFA5;
+    --story-label: #E3B7B0; --story-icon: #EAC9A6; --story-script: #F6D9CE;
+    --gallery-frame: #FFFFFF;
+    --toggle-track: rgba(255,255,255,0.55); --toggle-thumb: #FFFFFF;
+  }
+  [data-theme="baddie"] {
+    --bg-1: #1c1c1e; --bg-2: #0f0f10; --bg-3: #262628;
+    --cream-1: #19191a; --cream-2: #101011;
+    --story-1: #060606; --story-2: #141415;
+    --grad-1: #5a5a5e; --grad-2: #1f1f21;
+    --glass-bg: rgba(32,32,34,0.72); --glass-border: rgba(255,255,255,0.1);
+    --letter-1: #1b1b1c; --letter-2: #141415;
+    --ink: #EDEDEF; --muted: #9c9ca1; --accent: #C98E8E;
+    --cream-text: #F0F0F1; --cream-text-muted: #B7B7BC;
+    --shadow: rgba(0,0,0,0.45); --shadow-lg: rgba(0,0,0,0.6);
+    --phone-bg: #101011; --phone-border: rgba(255,255,255,0.08); --phone-shadow: rgba(0,0,0,0.55);
+    --input-bg: #202022; --input-border: #3a3a3d;
+    --blob-1: #3a3a3d; --blob-2: #2a2a2d;
+    --dot-active: #C98E8E; --dot-inactive: rgba(255,255,255,0.15);
+    --surface: #1c1c1e; --link-muted: #8a8a8f;
+    --story-label: #b0aeae; --story-icon: #C98E8E; --story-script: #d8d3d3;
+    --gallery-frame: #1c1c1e;
+    --toggle-track: rgba(255,255,255,0.12); --toggle-thumb: #C98E8E;
+  }
+
+  .app-bg { background: linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 45%, var(--bg-3) 100%); transition: background 0.5s ease; }
+  .cream-soft-bg { background: linear-gradient(160deg, var(--cream-1), var(--cream-2)); transition: background 0.5s ease; }
+  .story-bg { background: linear-gradient(160deg, var(--story-1), var(--story-2)); transition: background 0.5s ease; }
+  .rose-gradient { background: linear-gradient(135deg, var(--grad-1), var(--grad-2)); transition: background 0.5s ease; }
+  .glass-card { background: var(--glass-bg); backdrop-filter: blur(10px); border: 1px solid var(--glass-border); transition: background 0.5s ease, border-color 0.5s ease; }
+  .letter-card { background: linear-gradient(180deg, var(--letter-1), var(--letter-2)); transition: background 0.5s ease; }
+
+  .text-ink { color: var(--ink); transition: color 0.5s ease; }
+  .text-muted { color: var(--muted); transition: color 0.5s ease; }
+  .text-accent { color: var(--accent); transition: color 0.5s ease; }
+  .text-cream { color: var(--cream-text); }
+  .text-cream-muted { color: var(--cream-text-muted); }
+
+  .soft-shadow { box-shadow: 0 8px 30px var(--shadow); }
+  .soft-shadow-lg { box-shadow: 0 20px 50px var(--shadow-lg); }
+
+  .phone-frame { max-width: 430px; width: 100%; height: 100dvh; border-radius: 0; position: relative; overflow: hidden; background: var(--phone-bg); transition: background 0.5s ease; }
+  @media (min-width: 640px) {
+    .phone-frame { height: 860px; max-height: 90vh; border-radius: 2.5rem; box-shadow: 0 20px 60px var(--phone-shadow); border: 1px solid var(--phone-border); }
+  }
+
+  @keyframes shake { 10%,90%{transform:translateX(-2px)} 20%,80%{transform:translateX(4px)} 30%,50%,70%{transform:translateX(-8px)} 40%,60%{transform:translateX(8px)} }
+  .shake { animation: shake 0.5s ease; }
+  @keyframes pulseGlow { 0%,100%{ box-shadow: 0 0 0 0 rgba(201,147,131,0.45);} 50%{ box-shadow: 0 0 0 12px rgba(201,147,131,0);} }
+  .pulse-glow { animation: pulseGlow 2.4s infinite; }
+  @keyframes dotPulse { 0%,100%{ transform: scale(1);} 50%{ transform: scale(1.5);} }
+  .dot-pulse { animation: dotPulse 1.6s ease-in-out infinite; }
+  @keyframes dashFlow { to { stroke-dashoffset: -200; } }
+  .dash-flow { animation: dashFlow 6s linear infinite; }
+  @keyframes fadeInUp { from{opacity:0; transform:translateY(16px);} to{opacity:1; transform:translateY(0);} }
+  .fade-in-up { animation: fadeInUp 0.6s ease both; }
+  @keyframes popIn { from{opacity:0; transform:scale(0.85);} to{opacity:1; transform:scale(1);} }
+  .pop-in { animation: popIn 0.4s cubic-bezier(.34,1.56,.64,1) both; }
+  @keyframes growBar { from{width:0%;} to{width:100%;} }
+  @keyframes blobDrift { 0%,100%{ transform: translate(0,0);} 50%{ transform: translate(14px,-18px);} }
+  .blob-drift { animation: blobDrift 9s ease-in-out infinite; }
+  @keyframes floatUp {
+    0% { transform: translateY(0) translateX(0); opacity: 0; }
+    10% { opacity: 0.6; } 90% { opacity: 0.35; }
+    100% { transform: translateY(-820px) translateX(14px); opacity: 0; }
+  }
+  @keyframes shimmerSweep { 0%{ background-position: -160% 0; } 100%{ background-position: 160% 0; } }
+  .shimmer-box { background-image: linear-gradient(100deg, transparent 30%, rgba(255,255,255,0.14) 50%, transparent 70%); background-size: 250% 100%; animation: shimmerSweep 3.2s linear infinite; }
+  .scene { position:absolute; inset:0; transition: opacity 0.5s ease, transform 0.5s ease; }
+  .scene-hidden { opacity:0; transform: translateY(16px); pointer-events:none; }
+  .scene-visible { opacity:1; transform: translateY(0); }
+  .letter-scroll::-webkit-scrollbar { width: 5px; }
+  .letter-scroll::-webkit-scrollbar-thumb { background: rgba(200,140,140,0.4); border-radius: 10px; }
+
+  /* theme toggle switch */
+  .theme-toggle-track { position: absolute; bottom: 60px; right: 14px; z-index: 90; width: 54px; height: 30px; border-radius: 9999px; background: var(--toggle-track); border: 1px solid var(--glass-border); backdrop-filter: blur(8px); cursor: pointer; padding: 3px; display: flex; align-items: center; transition: background 0.4s ease, border-color 0.4s ease; appearance: none; -webkit-appearance: none; font: inherit; }
+  .theme-toggle-knob { width: 22px; height: 22px; border-radius: 9999px; background: var(--toggle-thumb); display: flex; align-items: center; justify-content: center; font-size: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.25); transition: transform 0.4s cubic-bezier(.34,1.56,.64,1), background 0.4s ease; }
+
+  /* gallery */
+  .gallery-grid { columns: 2; column-gap: 12px; }
+  .gallery-item { break-inside: avoid; margin-bottom: 14px; cursor: pointer; }
+  .gallery-frame { background: var(--gallery-frame); padding: 6px 6px 22px 6px; border-radius: 8px; box-shadow: 0 6px 18px var(--shadow); position: relative; transition: transform 0.2s ease, background 0.5s ease; }
+  .gallery-item:active .gallery-frame { transform: scale(0.96); }
+  .gallery-frame img { width: 100%; display: block; border-radius: 3px; }
+  .gallery-caption { position: absolute; bottom: 5px; left: 0; right: 0; text-align: center; font-size: 10px; letter-spacing: 0.08em; color: var(--muted); font-family: 'Quicksand', sans-serif; }
+
+  /* story hero buttons */
+  .story-btn { position: relative; border-radius: 20px; overflow: hidden; height: 128px; cursor: pointer; box-shadow: 0 10px 26px var(--shadow); transition: transform 0.2s ease; }
+  .story-btn:active { transform: scale(0.97); }
+  .story-btn img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .story-btn-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,0.62) 100%); display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 12px; text-align: center; }
+
+  /* photo story viewer */
+  .pstory-img-wrap { position: absolute; inset: 0; }
+  .pstory-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+  .pstory-gradient { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 28%, rgba(0,0,0,0) 62%, rgba(0,0,0,0.6) 100%); }
+
+  /* reply box */
+  .reply-textarea { width: 100%; min-height: 92px; border-radius: 16px; padding: 14px; font-family: 'Quicksand', sans-serif; font-size: 14px; color: var(--ink); background: var(--input-bg); border: 2px solid var(--input-border); outline: none; resize: vertical; transition: background 0.5s ease, border-color 0.3s ease; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useRef, useMemo } = React;
+
+/* ---------- tiny inline icons (no external icon package needed) ---------- */
+function IconLock({ size = 20, color = 'currentColor', strokeWidth = 2 }) {
+  return (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>);
+}
+function IconCheck({ size = 16, color = 'currentColor' }) {
+  return (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>);
+}
+function IconSparkles({ size = 20, color = 'currentColor' }) {
+  return (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg>);
+}
+function IconMapPin({ size = 20, color = 'currentColor' }) {
+  return (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>);
+}
+function IconX({ size = 16, color = 'currentColor' }) {
+  return (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>);
+}
+function IconGift({ size = 20, color = 'currentColor' }) {
+  return (<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="8" width="18" height="4"/><path d="M12 8v13M19 12v9H5v-9M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg>);
+}
+
+/* ---------- CONFIG — this is the only section you need to touch to make it yours ---------- */
+const PARTNER_NAME = 'Alex';                                   // 🔧 shows up throughout the site
+const LOGIN_CREDENTIALS = { username: 'love', password: 'always' };
+const PASSCODE_ANSWERS = { q1: 'thepark', q2: '0101', q3: 'pizza' };
+const ACCEPTED_NICKNAMES = ['love', 'baby', 'babe', 'sweetheart', 'darling'];
+const REUNION_TARGET = new Date(Date.now() + 1000 * 60 * 60 * 24 * 60); // demo: always ~60 days out
+const REPLY_EMAIL = 'you@example.com';                          // 🔧 replies open addressed to this inbox
+const GITHUB_URL = 'https://github.com/YOUR_USERNAME/YOUR_REPO'; // 🔧 link back to your repo
+
+/* ---------- generated placeholder "photos" (no real images ship in this template) ---------- */
+function svgPhoto(g1, g2, emoji) {
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='400' height='520'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='${g1}'/><stop offset='1' stop-color='${g2}'/></linearGradient></defs><rect width='400' height='520' fill='url(#g)'/><text x='200' y='280' font-size='130' text-anchor='middle' dominant-baseline='middle'>${emoji}</text></svg>`;
+  return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+}
+const ROSE_PLACEHOLDERS = [
+  ['#F6D9CE', '#E8B4B8', '🌸'], ['#FBEAE9', '#C99383', '💗'], ['#F3D0CE', '#EFD9B8', '✨'],
+  ['#FDF1EA', '#D9998F', '🌷'], ['#F3C9CE', '#B08876', '🎀'], ['#EAC9A6', '#E8B4B8', '🌼'],
+];
+const BADDIE_PLACEHOLDERS = [
+  ['#3a3a3d', '#1c1c1e', '🖤'], ['#5a5a5e', '#0f0f10', '✨'], ['#2a2a2d', '#C98E8E', '🌙'],
+  ['#262628', '#101011', '🥀'], ['#1c1c1e', '#C98E8E', '⚡'], ['#4a4a4d', '#17171a', '💿'],
+];
+function placeholderPhotos(theme, count, offset = 0) {
+  const palette = theme === 'baddie' ? BADDIE_PLACEHOLDERS : ROSE_PLACEHOLDERS;
+  return Array.from({ length: count }).map((_, i) => {
+    const [g1, g2, emoji] = palette[(i + offset) % palette.length];
+    return svgPhoto(g1, g2, emoji);
+  });
+}
+function placeholderOne(theme, index) {
+  const palette = theme === 'baddie' ? BADDIE_PLACEHOLDERS : ROSE_PLACEHOLDERS;
+  const [g1, g2, emoji] = palette[index % palette.length];
+  return svgPhoto(g1, g2, emoji);
+}
+
+const ROSE_CONFETTI = ['#F3C9CE', '#E8A9A9', '#D9AE84', '#F6E1CE', '#C99383', '#FFFFFF'];
+const BADDIE_CONFETTI = ['#FFFFFF', '#C4C4C8', '#8a8a8f', '#3a3a3d', '#C98E8E', '#e6e6e8'];
+
+/* ---------- ambient hearts ---------- */
+function FloatingHearts({ count = 8 }) {
+  const hearts = useMemo(() => Array.from({ length: count }).map(() => ({
+    left: Math.random() * 90 + 5, delay: Math.random() * 7, duration: 7 + Math.random() * 6,
+    size: 10 + Math.random() * 14, symbol: Math.random() > 0.5 ? '💗' : '✨',
+  })), [count]);
+  return (
+    <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 1 }}>
+      {hearts.map((h, i) => (
+        <span key={i} style={{ position: 'absolute', left: `${h.left}%`, bottom: '-8%', fontSize: h.size, animation: `floatUp ${h.duration}s linear ${h.delay}s infinite` }}>{h.symbol}</span>
+      ))}
+    </div>
+  );
+}
+
+function Scene({ show, children }) {
+  const [mounted, setMounted] = useState(show);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    if (show) { setMounted(true); const id = requestAnimationFrame(() => setVisible(true)); return () => cancelAnimationFrame(id); }
+    else { setVisible(false); const t = setTimeout(() => setMounted(false), 500); return () => clearTimeout(t); }
+  }, [show]);
+  if (!mounted) return null;
+  return <div className={`scene ${visible ? 'scene-visible' : 'scene-hidden'}`}>{children}</div>;
+}
+
+function Blobs({ c1 = 'var(--blob-1)', c2 = 'var(--blob-2)' }) {
+  return (<>
+    <div className="blob-drift" style={{ position: 'absolute', top: '-4rem', left: '-4rem', width: '14rem', height: '14rem', borderRadius: '9999px', background: c1, opacity: 0.5, filter: 'blur(60px)' }} />
+    <div className="blob-drift" style={{ position: 'absolute', bottom: '-5rem', right: '-2.5rem', width: '16rem', height: '16rem', borderRadius: '9999px', background: c2, opacity: 0.4, filter: 'blur(60px)', animationDelay: '1.5s' }} />
+  </>);
+}
+
+/* ---------- Section 0: Login ---------- */
+function LoginGate({ onLoggedIn }) {
+  const [user, setUser] = useState(''); const [pass, setPass] = useState('');
+  const [status, setStatus] = useState('idle'); const [success, setSuccess] = useState(false);
+  const normalize = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+  function submit() {
+    const ok = normalize(user) === normalize(LOGIN_CREDENTIALS.username) && normalize(pass) === normalize(LOGIN_CREDENTIALS.password);
+    if (ok) { setStatus('right'); setSuccess(true); setTimeout(onLoggedIn, 1000); }
+    else { setStatus('wrong'); setTimeout(() => setStatus('idle'), 550); }
+  }
+  return (
+    <div className="h-full w-full flex flex-col items-center justify-center px-7 font-body" style={{ position: 'relative', overflow: 'hidden' }}>
+      <Blobs /><FloatingHearts count={7} />
+      <div style={{ position: 'relative', zIndex: 10, width: '100%', opacity: success ? 0 : 1, transform: success ? 'scale(0.96)' : 'scale(1)', transition: 'opacity 0.6s ease, transform 0.6s ease' }}>
+        <div className="flex flex-col items-center mb-8">
+          <div className="rose-gradient pulse-glow flex items-center justify-center mb-4" style={{ width: 60, height: 60, borderRadius: '9999px' }}><span style={{ fontSize: 24 }}>💌</span></div>
+          <p className="font-script text-ink" style={{ fontSize: 30 }}>sign in, my love</p>
+          <p className="text-xs uppercase tracking-widest text-muted mt-1">just for you, {PARTNER_NAME}</p>
+        </div>
+        <div className={`glass-card soft-shadow p-5 rounded-3xl ${status === 'wrong' ? 'shake' : ''}`}>
+          <label className="text-xs uppercase tracking-wider text-muted">user id</label>
+          <input value={user} onChange={(e) => setUser(e.target.value)} placeholder="who are you to me?" className="w-full rounded-xl px-4 py-3 font-body text-ink mt-1 mb-4"
+            style={{ outline: 'none', border: `2px solid ${status === 'wrong' ? '#FCA5A5' : status === 'right' ? '#86EFAC' : 'var(--input-border)'}`, background: 'var(--input-bg)', transition: 'border-color 0.2s, background 0.5s ease' }} />
+          <label className="text-xs uppercase tracking-wider text-muted">password</label>
+          <input type="password" value={pass} onChange={(e) => setPass(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && submit()} placeholder="our secret word" className="w-full rounded-xl px-4 py-3 font-body text-ink mt-1"
+            style={{ outline: 'none', border: `2px solid ${status === 'wrong' ? '#FCA5A5' : status === 'right' ? '#86EFAC' : 'var(--input-border)'}`, background: 'var(--input-bg)', transition: 'border-color 0.2s, background 0.5s ease' }} />
+          {status === 'wrong' && <p className="text-xs mt-2" style={{ color: '#F87171' }}>that's not it… try again 🤔</p>}
+          {status === 'right' && <p className="text-xs mt-2 flex items-center gap-1" style={{ color: '#4ADE80' }}><IconCheck size={14} /> welcome back, love</p>}
+          <button onClick={submit} className="rose-gradient w-full py-3 rounded-xl font-body font-semibold text-white mt-4">log in →</button>
+        </div>
+        <p className="text-xs text-center text-muted" style={{ marginTop: 14 }}>✨ demo mode — try <b>love</b> / <b>always</b></p>
+      </div>
+      {success && <div className="pop-in" style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 20 }}><p className="font-script text-ink" style={{ fontSize: 36 }}>hi {PARTNER_NAME} 💗</p></div>}
+    </div>
+  );
+}
+
+/* ---------- Section 1: Passcode ---------- */
+function PasscodeGateway({ onUnlock }) {
+  const questions = [
+    { key: 'q1', label: 'Where did we go on our first date?', placeholder: 'a place…', hint: 'the park' },
+    { key: 'q2', label: 'What is our anniversary date? (MMDD)', placeholder: 'e.g. 0101', hint: '0101' },
+    { key: 'q3', label: 'What do we always order together?', placeholder: 'a food…', hint: 'pizza' },
+    { key: 'q4', label: 'What do I usually call you?', placeholder: 'a nickname…', hint: 'love' },
+  ];
+  const [step, setStep] = useState(0); const [value, setValue] = useState('');
+  const [status, setStatus] = useState('idle'); const [unlocking, setUnlocking] = useState(false);
+  const normalize = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const normalizedNicknames = ACCEPTED_NICKNAMES.map(normalize);
+  function check() {
+    const q = questions[step].key; let ok;
+    if (q === 'q2') ok = value.trim() === PASSCODE_ANSWERS.q2;
+    else if (q === 'q4') ok = normalizedNicknames.includes(normalize(value));
+    else ok = normalize(value) === PASSCODE_ANSWERS[q];
+    if (ok) {
+      setStatus('right');
+      setTimeout(() => {
+        if (step === questions.length - 1) { setUnlocking(true); setTimeout(onUnlock, 1000); }
+        else { setStep((s) => s + 1); setValue(''); setStatus('idle'); }
+      }, 650);
+    } else { setStatus('wrong'); setTimeout(() => setStatus('idle'), 550); }
+  }
+  return (
+    <div className="h-full w-full flex flex-col items-center justify-center px-7 font-body" style={{ position: 'relative', overflow: 'hidden' }}>
+      <Blobs /><FloatingHearts count={6} />
+      <div style={{ position: 'relative', zIndex: 10, width: '100%', opacity: unlocking ? 0 : 1, transition: 'opacity 0.7s ease' }}>
+        <div className="flex flex-col items-center mb-8">
+          <div className="rose-gradient pulse-glow flex items-center justify-center mb-4" style={{ width: 64, height: 64, borderRadius: '9999px' }}><IconLock color="white" strokeWidth={1.75} size={28} /></div>
+          <p className="font-script text-ink" style={{ fontSize: 32 }}>for {PARTNER_NAME}</p>
+          <p className="text-xs uppercase tracking-widest text-muted mt-1">a little something is locked below</p>
+        </div>
+        <div className="flex justify-center gap-2 mb-6">
+          {questions.map((_, i) => (<div key={i} style={{ height: 6, width: i === step ? 24 : 6, borderRadius: 9999, background: i <= step ? 'var(--accent)' : 'var(--input-border)', transition: 'all 0.3s' }} />))}
+        </div>
+        <div key={step} className="fade-in-up glass-card soft-shadow p-5 rounded-3xl">
+          <p className="font-display text-ink text-lg leading-snug mb-4">{questions[step].label}</p>
+          <input value={value} onChange={(e) => setValue(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && check()} placeholder={questions[step].placeholder}
+            className={`w-full rounded-xl px-4 py-3 font-body text-ink ${status === 'wrong' ? 'shake' : ''}`}
+            style={{ outline: 'none', border: `2px solid ${status === 'wrong' ? '#FCA5A5' : status === 'right' ? '#86EFAC' : 'var(--input-border)'}`, background: 'var(--input-bg)', transition: 'border-color 0.2s, background 0.5s ease' }} />
+          {status === 'wrong' && <p className="text-xs mt-2" style={{ color: '#F87171' }}>hmm, not quite — try again 🤔</p>}
+          {status === 'right' && <p className="text-xs mt-2 flex items-center gap-1" style={{ color: '#4ADE80' }}><IconCheck size={14} /> yes! that's right</p>}
+          <button onClick={check} className="rose-gradient w-full py-3 rounded-xl font-body font-semibold text-white mt-4">Unlock {step === questions.length - 1 ? '💗' : ''}</button>
+        </div>
+        <p className="text-xs text-center text-muted" style={{ marginTop: 14 }}>✨ demo hint — try "<b>{questions[step].hint}</b>"</p>
+      </div>
+      {unlocking && <div className="pop-in" style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 20 }}><p className="font-script text-ink" style={{ fontSize: 40 }}>unlocking…</p></div>}
+    </div>
+  );
+}
+
+/* ---------- Section 2: Story Wrapped ---------- */
+function useRolling(target, active, duration = 1400) {
+  const [val, setVal] = useState(0);
+  useEffect(() => {
+    if (!active) { setVal(0); return; }
+    let raf, start;
+    function step(ts) { if (!start) start = ts; const p = Math.min((ts - start) / duration, 1); setVal(Math.floor((1 - Math.pow(1 - p, 3)) * target)); if (p < 1) raf = requestAnimationFrame(step); }
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [active, target, duration]);
+  return val;
+}
+const CARD_DURATION = 5000;
+function StoryWrapped({ onComplete, theme }) {
+  const total = 4; const [idx, setIdx] = useState(0); const [paused, setPaused] = useState(false); const [progressKey, setProgressKey] = useState(0);
+  useEffect(() => { if (paused) return; const t = setTimeout(() => goNext(), CARD_DURATION); return () => clearTimeout(t); }, [idx, paused, progressKey]);
+  function goNext() { if (idx === total - 1) onComplete(); else { setIdx((i) => i + 1); setProgressKey((k) => k + 1); } }
+  function goPrev() { if (idx > 0) { setIdx((i) => i - 1); setProgressKey((k) => k + 1); } }
+  function handleTap(e) { const width = e.currentTarget.clientWidth; if (e.clientX < width * 0.35) goPrev(); else goNext(); }
+  const hoursVal = useRolling(640, idx === 0); const memesVal = useRolling(3412, idx === 1);
+  const photoBox = (src, height = 140) => (
+    <div className="w-full mb-6" style={{ height, borderRadius: 18, overflow: 'hidden' }}>
+      <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+    </div>
+  );
+  return (
+    <div className="story-bg font-body select-none h-full w-full" style={{ position: 'relative', overflow: 'hidden', userSelect: 'none' }}
+      onPointerDown={() => setPaused(true)} onPointerUp={() => setPaused(false)} onPointerLeave={() => setPaused(false)} onClick={handleTap}>
+      <div style={{ position: 'absolute', top: 16, left: 16, right: 16, display: 'flex', gap: 6, zIndex: 20 }}>
+        {Array.from({ length: total }).map((_, i) => (
+          <div key={i} style={{ flex: 1, height: 4, borderRadius: 9999, background: 'rgba(255,255,255,0.25)', overflow: 'hidden' }}>
+            <div key={i === idx ? `run-${progressKey}` : `static-${i}`} style={{ height: '100%', background: 'white', borderRadius: 9999, width: i < idx ? '100%' : i > idx ? '0%' : undefined, animation: i === idx ? `growBar ${CARD_DURATION}ms linear forwards` : undefined, animationPlayState: paused ? 'paused' : 'running' }} />
+          </div>
+        ))}
+      </div>
+      <div className="h-full w-full flex flex-col items-center justify-center px-8 text-center">
+        {idx === 0 && (<>
+          <p className="text-xs uppercase tracking-widest mb-3" style={{ color: 'var(--story-label)' }}>distance wrapped</p>
+          {photoBox(placeholderOne(theme, 2))}
+          <p className="font-display text-cream" style={{ fontSize: 56 }}>{hoursVal}</p>
+          <p className="text-sm text-cream-muted" style={{ maxWidth: 230 }}>total hours on video calls this year, so far 📞</p>
+        </>)}
+        {idx === 1 && (<>
+          <p className="text-xs uppercase tracking-widest mb-3" style={{ color: 'var(--story-label)' }}>distance wrapped</p>
+          {photoBox(placeholderOne(theme, 4))}
+          <p className="font-display text-cream" style={{ fontSize: 56 }}>{memesVal.toLocaleString()}</p>
+          <p className="text-sm text-cream-muted" style={{ maxWidth: 230 }}>memes sent to each other 😂</p>
+        </>)}
+        {idx === 2 && (<>
+          <p className="text-xs uppercase tracking-widest mb-3" style={{ color: 'var(--story-label)' }}>your top trait</p>
+          <IconSparkles size={36} color="var(--story-icon)" />
+          <p className="font-display text-cream" style={{ fontSize: 26, lineHeight: 1.4, marginTop: 16 }}>coming up with random<br />conspiracy theories<br />on the internet</p>
+        </>)}
+        {idx === 3 && (<>
+          <p className="text-xs uppercase tracking-widest mb-3" style={{ color: 'var(--story-label)' }}>my favorite memory</p>
+          {photoBox(placeholderOne(theme, 0), 200)}
+          <p className="font-script" style={{ fontSize: 30, color: 'var(--story-script)' }}>our favorite golden hour</p>
+        </>)}
+      </div>
+      <p className="text-xs text-center" style={{ position: 'absolute', bottom: 20, left: 0, right: 0, color: 'rgba(255,255,255,0.3)' }}>tap right to continue · tap left to go back · hold to pause</p>
+    </div>
+  );
+}
+
+/* ---------- Section 3: Map ---------- */
+function ConnectionMap({ onComplete }) {
+  const pins = [
+    { id: 'home', label: 'Home', sub: 'you', x: 150, y: 390, note: 'where it all began 🏠' },
+    { id: 'halfway', label: 'Halfway', sub: 'our middle ground', x: 210, y: 230, note: 'the meet-in-the-middle spot 🎡' },
+    { id: 'them', label: 'Their City', sub: PARTNER_NAME, x: 130, y: 90, note: 'home for now 💛' },
+  ];
+  const [visited, setVisited] = useState(new Set()); const [active, setActive] = useState(null);
+  const allVisited = visited.size === pins.length;
+  function openPin(p) { setActive(p); setVisited((prev) => new Set(prev).add(p.id)); }
+  return (
+    <div className="cream-soft-bg font-body h-full w-full flex flex-col items-center justify-center px-6" style={{ position: 'relative', overflow: 'hidden' }}>
+      <p className="text-xs uppercase tracking-widest text-muted" style={{ position: 'absolute', top: 56, left: 0, right: 0, textAlign: 'center', zIndex: 10 }}>two cities, one connection</p>
+      <Blobs />
+      <svg viewBox="0 0 340 480" style={{ width: '100%', maxWidth: 300, position: 'relative', zIndex: 10 }}>
+        <defs><linearGradient id="threadGrad" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" style={{ stopColor: 'var(--grad-1)' }} /><stop offset="100%" style={{ stopColor: 'var(--accent)' }} /></linearGradient></defs>
+        <path d="M150,390 C 190,320 170,270 210,230 C 230,190 160,140 130,90" fill="none" stroke="url(#threadGrad)" strokeWidth="2.5" strokeDasharray="8 8" className="dash-flow" opacity="0.85" />
+        {pins.map((p) => (
+          <g key={p.id} transform={`translate(${p.x},${p.y})`} onClick={() => openPin(p)} style={{ cursor: 'pointer' }}>
+            <circle r="16" style={{ fill: visited.has(p.id) ? 'var(--accent)' : 'var(--blob-1)' }} className="pulse-glow" />
+            <circle r="16" fill="none" stroke="white" strokeWidth="2" />
+            <foreignObject x="-8" y="-8" width="16" height="16"><IconMapPin size={16} color="white" strokeWidth={2} /></foreignObject>
+            <text y="34" textAnchor="middle" fontSize="13" fontWeight="600" style={{ fill: 'var(--ink)' }} fontFamily="Quicksand, sans-serif">{p.label}</text>
+            <text y="49" textAnchor="middle" fontSize="9" style={{ fill: 'var(--muted)' }} fontFamily="Quicksand, sans-serif">{p.sub}</text>
+          </g>
+        ))}
+      </svg>
+      <p className="text-xs text-muted mt-4" style={{ position: 'relative', zIndex: 10 }}>tap each pin to see what it means to us</p>
+      <button onClick={onComplete} disabled={!allVisited} className="rose-gradient font-body font-semibold text-white px-8 py-3 rounded-full mt-6"
+        style={{ position: 'relative', zIndex: 10, opacity: allVisited ? 1 : 0.4, pointerEvents: allVisited ? 'auto' : 'none', transition: 'opacity 0.3s' }}>continue our story →</button>
+      {active && (
+        <div onClick={() => setActive(null)} style={{ position: 'absolute', inset: 0, zIndex: 30, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 2rem', background: 'rgba(0,0,0,0.2)', backdropFilter: 'blur(3px)' }}>
+          <div onClick={(e) => e.stopPropagation()} className="pop-in soft-shadow-lg" style={{ position: 'relative', background: 'var(--surface)', borderRadius: 24, padding: 24, maxWidth: 280, width: '100%', textAlign: 'center' }}>
+            <button onClick={() => setActive(null)} style={{ position: 'absolute', top: 16, right: 16 }}><IconX size={16} color="var(--muted)" /></button>
+            <p className="font-display text-ink" style={{ fontSize: 20, marginBottom: 4 }}>{active.label}</p>
+            <p className="font-script text-accent" style={{ fontSize: 24 }}>{active.note}</p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Section 4: Scratch coupons ---------- */
+function ScratchCard({ title, desc, onRevealed }) {
+  const canvasRef = useRef(null); const [revealed, setRevealed] = useState(false); const [justRevealed, setJustRevealed] = useState(false);
+  const scratching = useRef(false); const alreadyRevealed = useRef(false);
+  useEffect(() => {
+    const canvas = canvasRef.current; const ctx = canvas.getContext('2d');
+    const w = canvas.clientWidth, h = canvas.clientHeight; canvas.width = w * 2; canvas.height = h * 2; ctx.scale(2, 2);
+    const grad = ctx.createLinearGradient(0, 0, w, h); grad.addColorStop(0, '#DCDCE1'); grad.addColorStop(0.5, '#F2F2F5'); grad.addColorStop(1, '#C9C9D1');
+    ctx.fillStyle = grad; ctx.fillRect(0, 0, w, h);
+    ctx.fillStyle = 'rgba(120,90,90,0.4)'; ctx.font = '600 13px Quicksand, sans-serif'; ctx.textAlign = 'center'; ctx.fillText('✨ scratch me ✨', w / 2, h / 2);
+  }, []);
+  function getPos(e) { const rect = canvasRef.current.getBoundingClientRect(); const clientX = e.touches ? e.touches[0].clientX : e.clientX; const clientY = e.touches ? e.touches[0].clientY : e.clientY; return { x: clientX - rect.left, y: clientY - rect.top }; }
+  function scratchAt(x, y) { const ctx = canvasRef.current.getContext('2d'); ctx.globalCompositeOperation = 'destination-out'; ctx.beginPath(); ctx.arc(x, y, 22, 0, Math.PI * 2); ctx.fill(); }
+  function checkRevealPercent() {
+    if (alreadyRevealed.current) return;
+    const canvas = canvasRef.current; const ctx = canvas.getContext('2d'); const w = canvas.width, h = canvas.height, step = 8;
+    let cleared = 0, total = 0; const data = ctx.getImageData(0, 0, w, h).data;
+    for (let y = 0; y < h; y += step) for (let x = 0; x < w; x += step) { total++; if (data[(y * w + x) * 4 + 3] < 60) cleared++; }
+    if (total > 0 && cleared / total > 0.5) { alreadyRevealed.current = true; setRevealed(true); setJustRevealed(true); setTimeout(() => setJustRevealed(false), 1200); onRevealed && onRevealed(); }
+  }
+  function handleMove(e) { if (!scratching.current) return; const { x, y } = getPos(e); scratchAt(x, y); checkRevealPercent(); }
+  return (
+    <div className={`soft-shadow ${justRevealed ? 'pulse-glow' : ''}`} style={{ position: 'relative', borderRadius: 20, overflow: 'hidden', height: 128 }}>
+      <div className="flex flex-col items-center justify-center px-4 text-center" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, var(--letter-1), var(--letter-2))' }}>
+        <IconGift size={20} color="var(--accent)" />
+        <p className="font-display text-ink" style={{ fontSize: 16, marginTop: 4 }}>{title}</p>
+        <p className="text-xs text-muted" style={{ marginTop: 2 }}>{desc}</p>
+        {justRevealed && <span className="pop-in" style={{ position: 'absolute', top: 6, right: 10, fontSize: 18 }}>✨</span>}
+      </div>
+      <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', touchAction: 'none', opacity: revealed ? 0 : 1, pointerEvents: revealed ? 'none' : 'auto', transition: 'opacity 0.7s ease' }}
+        onMouseDown={() => (scratching.current = true)} onMouseUp={() => (scratching.current = false)} onMouseLeave={() => (scratching.current = false)} onMouseMove={handleMove}
+        onTouchStart={() => (scratching.current = true)} onTouchEnd={() => (scratching.current = false)} onTouchMove={handleMove} />
+    </div>
+  );
+}
+function ScratchCoupons({ onComplete }) {
+  const [revealedCount, setRevealedCount] = useState(0);
+  const coupons = [
+    { title: 'Takeout Night, My Treat', desc: "I'll order whatever you're craving, delivered to your door." },
+    { title: 'No-Argument Movie Pick', desc: 'You choose, zero complaints from me.' },
+    { title: 'Surprise Treat', desc: 'Something small and thoughtful, just because.' },
+  ];
+  const allRevealed = revealedCount >= coupons.length;
+  return (
+    <div className="cream-soft-bg font-body h-full w-full flex flex-col items-center justify-center px-7">
+      <p className="text-xs uppercase tracking-widest text-muted mb-1">for you, {PARTNER_NAME}</p>
+      <p className="font-display text-ink" style={{ fontSize: 24, marginBottom: 24 }}>scratch & reveal</p>
+      <div className="w-full flex flex-col gap-4">{coupons.map((c, i) => (<ScratchCard key={i} title={c.title} desc={c.desc} onRevealed={() => setRevealedCount((n) => n + 1)} />))}</div>
+      <button onClick={onComplete} disabled={!allRevealed} className="rose-gradient font-body font-semibold text-white px-8 py-3 rounded-full"
+        style={{ marginTop: 28, opacity: allRevealed ? 1 : 0.4, pointerEvents: allRevealed ? 'auto' : 'none', transition: 'opacity 0.3s' }}>one more thing… →</button>
+    </div>
+  );
+}
+
+/* ---------- Reusable full-screen photo story viewer ---------- */
+function PhotoStory({ photos, startIndex = 0, label, onClose }) {
+  const total = photos.length;
+  const [idx, setIdx] = useState(Math.min(startIndex, Math.max(total - 1, 0)));
+  const [paused, setPaused] = useState(false);
+  const [progressKey, setProgressKey] = useState(0);
+  const DURATION = 3800;
+  useEffect(() => {
+    if (paused || total === 0) return;
+    const t = setTimeout(() => goNext(), DURATION);
+    return () => clearTimeout(t);
+  }, [idx, paused, progressKey]);
+  function goNext() { if (idx === total - 1) onClose(); else { setIdx((i) => i + 1); setProgressKey((k) => k + 1); } }
+  function goPrev() { if (idx > 0) { setIdx((i) => i - 1); setProgressKey((k) => k + 1); } }
+  function handleTap(e) { const rect = e.currentTarget.getBoundingClientRect(); const x = e.clientX - rect.left; if (x < rect.width * 0.35) goPrev(); else goNext(); }
+  if (total === 0) return null;
+  return (
+    <div className="story-bg" style={{ position: 'absolute', inset: 0, zIndex: 80, overflow: 'hidden' }}
+      onPointerDown={() => setPaused(true)} onPointerUp={() => setPaused(false)} onPointerLeave={() => setPaused(false)} onClick={handleTap}>
+      <div className="pstory-img-wrap">
+        <img src={photos[idx]} alt="" />
+        <div className="pstory-gradient" />
+      </div>
+      <div style={{ position: 'absolute', top: 16, left: 16, right: 16, display: 'flex', gap: 6, zIndex: 20 }}>
+        {Array.from({ length: total }).map((_, i) => (
+          <div key={i} style={{ flex: 1, height: 4, borderRadius: 9999, background: 'rgba(255,255,255,0.3)', overflow: 'hidden' }}>
+            <div key={i === idx ? `run-${progressKey}` : `static-${i}`} style={{ height: '100%', background: 'white', borderRadius: 9999, width: i < idx ? '100%' : i > idx ? '0%' : undefined, animation: i === idx ? `growBar ${DURATION}ms linear forwards` : undefined, animationPlayState: paused ? 'paused' : 'running' }} />
+          </div>
+        ))}
+      </div>
+      <button type="button" onClick={(e) => { e.stopPropagation(); onClose(); }} style={{ position: 'absolute', top: 30, right: 14, zIndex: 30, width: 32, height: 32, borderRadius: 9999, background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: 'none' }}>
+        <IconX size={16} color="white" />
+      </button>
+      {label && <p className="font-script" style={{ position: 'absolute', bottom: 26, left: 0, right: 0, textAlign: 'center', color: 'white', fontSize: 22, zIndex: 20, textShadow: '0 2px 10px rgba(0,0,0,0.4)', padding: '0 20px' }}>{label}</p>}
+    </div>
+  );
+}
+
+/* ---------- Rose / baddie theme toggle switch ---------- */
+function ThemeToggle({ theme, onToggle }) {
+  const isBaddie = theme === 'baddie';
+  return (
+    <button type="button" onClick={onToggle} className="theme-toggle-track" aria-label="toggle rose or baddie theme" aria-pressed={isBaddie}>
+      <div className="theme-toggle-knob" style={{ transform: isBaddie ? 'translateX(26px)' : 'translateX(0px)' }}>
+        <span>{isBaddie ? '🖤' : '🌸'}</span>
+      </div>
+    </button>
+  );
+}
+
+/* ---------- Gallery scene: story buttons + museum-style grid ---------- */
+function GalleryScene({ onComplete, theme }) {
+  const [story, setStory] = useState(null);
+  const heroes = [
+    { key: 'together', label: 'our selfies', emoji: '🤍', photos: placeholderPhotos(theme, 6, 0) },
+    { key: 'fits', label: 'favorite fits', emoji: '👗', photos: placeholderPhotos(theme, 6, 3) },
+  ];
+  const galleryPhotos = placeholderPhotos(theme, 8, 1);
+  return (
+    <div className="cream-soft-bg font-body h-full w-full" style={{ position: 'relative', overflow: 'hidden' }}>
+      <Blobs />
+      <div style={{ position: 'relative', zIndex: 2, height: '100%', overflowY: 'auto', paddingTop: 52, paddingBottom: 36, paddingLeft: 22, paddingRight: 22 }}>
+        <p className="text-xs uppercase tracking-widest text-muted text-center mb-1">the gallery</p>
+        <p className="font-display text-ink text-center" style={{ fontSize: 22, marginBottom: 22 }}>a museum of my favorite person</p>
+        <div className="grid grid-cols-2 gap-3" style={{ marginBottom: 26 }}>
+          {heroes.map((h) => (
+            <div key={h.key} className="story-btn" onClick={() => setStory({ photos: h.photos, startIndex: 0, label: `${h.label} ${h.emoji}` })}>
+              <img src={h.photos[0]} alt="" loading="lazy" />
+              <div className="story-btn-overlay">
+                <p className="font-script" style={{ color: 'white', fontSize: 19 }}>{h.label} {h.emoji}</p>
+                <p style={{ color: 'rgba(255,255,255,0.78)', fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', marginTop: 2 }}>tap to view</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p className="text-xs text-muted text-center" style={{ marginBottom: 14 }}>· · · or browse the whole collection · · ·</p>
+        <div className="gallery-grid">
+          {galleryPhotos.map((src, i) => (
+            <div key={i} className="gallery-item" onClick={() => setStory({ photos: galleryPhotos, startIndex: i, label: 'you, always 🤍' })}>
+              <div className="gallery-frame">
+                <img src={src} alt="" loading="lazy" />
+                <span className="gallery-caption">no. {String(i + 1).padStart(2, '0')}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-center" style={{ marginTop: 20 }}>
+          <button type="button" onClick={onComplete} className="rose-gradient font-body font-semibold text-white px-8 py-3 rounded-full">one last thing… →</button>
+        </div>
+      </div>
+      {story && <PhotoStory photos={story.photos} startIndex={story.startIndex} label={story.label} onClose={() => setStory(null)} />}
+    </div>
+  );
+}
+
+/* ---------- Reply box (mailto, with copy fallback) ---------- */
+function ReplyBox() {
+  const [show, setShow] = useState(false);
+  const [text, setText] = useState('');
+  const [sent, setSent] = useState(false);
+  function buildMailto() {
+    const subject = encodeURIComponent('Re: Your Birthday Letter 💌');
+    const body = encodeURIComponent(text);
+    return `mailto:${REPLY_EMAIL}?subject=${subject}&body=${body}`;
+  }
+  function handleSend() {
+    if (!text.trim()) return;
+    window.location.href = buildMailto();
+    setSent(true);
+  }
+  async function handleCopy() {
+    if (!text.trim()) return;
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (e) {
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); } catch (err) {}
+      document.body.removeChild(ta);
+    }
+    setSent(true);
+  }
+  return (
+    <div className="glass-card soft-shadow" style={{ borderRadius: 20, padding: 18, marginTop: 16 }}>
+      {!show ? (
+        <button type="button" onClick={() => setShow(true)} className="w-full font-body font-semibold text-ink" style={{ background: 'transparent', border: '2px solid var(--input-border)', borderRadius: 14, padding: '12px 0' }}>💌 write back</button>
+      ) : (
+        <div>
+          <p className="text-xs uppercase tracking-wider text-muted" style={{ marginBottom: 8 }}>your reply</p>
+          <textarea className="reply-textarea" value={text} onChange={(e) => { setText(e.target.value); setSent(false); }} placeholder="tell them what's on your mind…" />
+          <div className="flex gap-2" style={{ marginTop: 10 }}>
+            <button type="button" onClick={handleSend} disabled={!text.trim()} className="rose-gradient font-body font-semibold text-white" style={{ flex: 1, padding: '11px 0', borderRadius: 12, opacity: text.trim() ? 1 : 0.5, border: 'none' }}>send my reply →</button>
+            <button type="button" onClick={handleCopy} disabled={!text.trim()} className="font-body text-muted" style={{ padding: '11px 16px', borderRadius: 12, border: '2px solid var(--input-border)', opacity: text.trim() ? 1 : 0.5, background: 'transparent' }}>copy</button>
+          </div>
+          {sent && <p className="text-xs text-accent" style={{ marginTop: 8 }}>✓ opening your email app — if nothing happens, tap "copy" and send it yourself 💌</p>}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ---------- Section 6: Reunion vault ---------- */
+function useCountdown(target) {
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => { const id = setInterval(() => setNow(Date.now()), 1000); return () => clearInterval(id); }, []);
+  const diff = target.getTime() - now; const clamped = Math.max(diff, 0);
+  return { days: Math.floor(clamped / 86400000), hours: Math.floor((clamped % 86400000) / 3600000), minutes: Math.floor((clamped % 3600000) / 60000), seconds: Math.floor((clamped % 60000) / 1000), reached: diff <= 0 };
+}
+function fireConfettiBurst(canvas, originX, colors) {
+  const ctx = canvas.getContext('2d'); const palette = colors || ROSE_CONFETTI;
+  const particles = Array.from({ length: 90 }).map(() => ({ x: originX, y: canvas.height * 0.35, vx: (Math.random() - 0.5) * 14, vy: -Math.random() * 13 - 4, size: Math.random() * 7 + 4, color: palette[Math.floor(Math.random() * palette.length)], rot: Math.random() * 360, vr: (Math.random() - 0.5) * 12, life: 1 }));
+  function tick() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); let alive = false;
+    particles.forEach((p) => {
+      p.vy += 0.32; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.life -= 0.008;
+      if (p.life > 0) { alive = true; ctx.save(); ctx.globalAlpha = Math.max(p.life, 0); ctx.translate(p.x, p.y); ctx.rotate((p.rot * Math.PI) / 180); ctx.fillStyle = p.color; ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2); ctx.restore(); }
+    });
+    if (alive) requestAnimationFrame(tick);
+  }
+  tick();
+}
+const LETTER_TEXT = `happy birthday to someone who makes ordinary days feel a little more golden.
+
+i wanted to put something together you could open whenever you wanted a smile — a little walk through the small things that make us, us: the inside jokes, the map of the miles between our cities, the memories worth scratching off and revealing again.
+
+none of it would mean much without you on the other end of it. you make distance feel smaller, and ordinary conversations feel like the best part of my day.
+
+here's to another year of terrible puns, spontaneous plans, and everything in between.
+
+happy birthday. i hope today feels exactly as good as you deserve.
+
+— built with a lot of love (and a little bit of react)`;
+function ReunionVault({ onRestart, theme = 'rose' }) {
+  const countdown = useCountdown(REUNION_TARGET); const [opened, setOpened] = useState(false);
+  const outerRef = useRef(null); const canvasRef = useRef(null);
+  useEffect(() => {
+    function resize() { if (canvasRef.current && outerRef.current) { canvasRef.current.width = outerRef.current.clientWidth; canvasRef.current.height = outerRef.current.clientHeight; } }
+    resize(); window.addEventListener('resize', resize); return () => window.removeEventListener('resize', resize);
+  }, []);
+  function handleOpen() {
+    setOpened(true); const c = canvasRef.current; if (!c) return;
+    const palette = theme === 'baddie' ? BADDIE_CONFETTI : ROSE_CONFETTI;
+    fireConfettiBurst(c, c.width * 0.3, palette); setTimeout(() => fireConfettiBurst(c, c.width * 0.7, palette), 200); setTimeout(() => fireConfettiBurst(c, c.width * 0.5, palette), 400);
+  }
+  const units = [['days', countdown.days], ['hrs', countdown.hours], ['min', countdown.minutes], ['sec', countdown.seconds]];
+  return (
+    <div ref={outerRef} className="h-full w-full" style={{ position: 'relative', overflow: 'hidden' }}>
+      <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 40 }} />
+      {!opened && <FloatingHearts count={6} />}
+      <div className="cream-soft-bg font-body h-full w-full flex flex-col items-center px-7" style={{ overflowY: 'auto', paddingTop: 48, paddingBottom: 24, position: 'relative', zIndex: 2 }}>
+        <p className="text-xs uppercase tracking-widest text-muted mb-2">the reunion vault</p>
+        <p className="font-display text-ink text-center" style={{ fontSize: 22, marginBottom: 24 }}>until i see you again…</p>
+        <div className="grid grid-cols-4 gap-2 w-full" style={{ marginBottom: 28 }}>
+          {units.map(([label, val]) => (<div key={label} className="glass-card flex flex-col items-center" style={{ borderRadius: 16, padding: '12px 0' }}><span className="font-display text-ink" style={{ fontSize: 22 }}>{String(val).padStart(2, '0')}</span><span className="text-xs uppercase tracking-wider text-muted" style={{ marginTop: 2 }}>{label}</span></div>))}
+        </div>
+        {!opened ? (
+          <button onClick={handleOpen} className="rose-gradient pulse-glow font-body font-semibold text-white" style={{ padding: '16px 40px', borderRadius: 9999, fontSize: 18 }}>🎁 open your present</button>
+        ) : (
+          <div className="pop-in w-full">
+            <div className="letter-card soft-shadow-lg letter-scroll" style={{ borderRadius: 24, padding: 24, maxHeight: 340, overflowY: 'auto' }}>
+              <p className="font-script text-accent text-center" style={{ fontSize: 27, lineHeight: 1.2, marginBottom: 16 }}>Happy Birthday, {PARTNER_NAME} 🎂</p>
+              <p className="font-display text-ink" style={{ fontSize: 14.5, lineHeight: 1.7, whiteSpace: 'pre-line' }}>{LETTER_TEXT}</p>
+            </div>
+            <ReplyBox />
+          </div>
+        )}
+        <div className="flex items-center justify-center gap-2" style={{ marginTop: 28 }}>
+          <button onClick={onRestart} className="text-xs" style={{ color: 'var(--link-muted)', textDecoration: 'underline' }}>↺ replay the whole thing</button>
+          <span className="text-xs" style={{ color: 'var(--link-muted)' }}>·</span>
+          <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="text-xs" style={{ color: 'var(--link-muted)', textDecoration: 'underline' }}>view the code ↗</a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- App ---------- */
+function App() {
+  const [section, setSection] = useState(0);
+  const [theme, setTheme] = useState('rose');
+  return (
+    <div className="app-bg" data-theme={theme} style={{ minHeight: '100vh', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="phone-frame">
+        <ThemeToggle theme={theme} onToggle={() => setTheme((t) => (t === 'rose' ? 'baddie' : 'rose'))} />
+        {section > 1 && (
+          <div style={{ position: 'absolute', top: 12, left: 0, right: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, pointerEvents: 'none' }}>
+            {[2, 3, 4, 5, 6].map((s) => (<div key={s} className={s === section ? 'dot-pulse' : ''} style={{ width: 6, height: 6, borderRadius: 9999, background: s <= section ? 'var(--dot-active)' : 'var(--dot-inactive)', transition: 'background 0.3s' }} />))}
+          </div>
+        )}
+        <Scene show={section === 0}><LoginGate onLoggedIn={() => setSection(1)} /></Scene>
+        <Scene show={section === 1}><PasscodeGateway onUnlock={() => setSection(2)} /></Scene>
+        <Scene show={section === 2}><StoryWrapped onComplete={() => setSection(3)} theme={theme} /></Scene>
+        <Scene show={section === 3}><ConnectionMap onComplete={() => setSection(4)} /></Scene>
+        <Scene show={section === 4}><ScratchCoupons onComplete={() => setSection(5)} /></Scene>
+        <Scene show={section === 5}><GalleryScene onComplete={() => setSection(6)} theme={theme} /></Scene>
+        <Scene show={section === 6}><ReunionVault onRestart={() => setSection(0)} theme={theme} /></Scene>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
