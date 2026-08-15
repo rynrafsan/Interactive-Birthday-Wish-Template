@@ -168,7 +168,7 @@ const PASSCODE_ANSWERS = { q1: 'thepark', q2: '0101', q3: 'pizza' };
 const ACCEPTED_NICKNAMES = ['love', 'baby', 'babe', 'sweetheart', 'darling'];
 const REUNION_TARGET = new Date(Date.now() + 1000 * 60 * 60 * 24 * 60); // demo: always ~60 days out
 const REPLY_EMAIL = 'you@example.com';                          // 🔧 replies open addressed to this inbox
-const GITHUB_URL = 'https://github.com/YOUR_USERNAME/YOUR_REPO'; // 🔧 link back to your repo
+const GITHUB_URL = 'https://github.com/rynrafsan/Interactive-Birthday-Wish-Template'; // 🔧 link back to your repo
 
 /* ---------- generated placeholder "photos" (no real images ship in this template) ---------- */
 function svgPhoto(g1, g2, emoji) {
@@ -692,7 +692,7 @@ function ReunionVault({ onRestart, theme = 'rose' }) {
         <div className="flex items-center justify-center gap-2" style={{ marginTop: 28 }}>
           <button onClick={onRestart} className="text-xs" style={{ color: 'var(--link-muted)', textDecoration: 'underline' }}>↺ replay the whole thing</button>
           <span className="text-xs" style={{ color: 'var(--link-muted)' }}>·</span>
-          <a href={https://github.com/rynrafsan/Interactive-Birthday-Wish-Template} target="_blank" rel="noopener noreferrer" className="text-xs" style={{ color: 'var(--link-muted)', textDecoration: 'underline' }}>view the code ↗</a>
+          <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="text-xs" style={{ color: 'var(--link-muted)', textDecoration: 'underline' }}>view the code ↗</a>
         </div>
       </div>
     </div>
